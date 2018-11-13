@@ -11,11 +11,11 @@ class Banco():
         self.executa(sql)
 
     def exclui(self, dia, disciplina):
-        sql = "DELETE * from "+dia+" WHERE disciplina = '"+disciplina+"'"
+        sql = "DELETE FROM "+dia+" WHERE disciplina = '"+disciplina+"'"
         self.executa(sql)
 
     def atualiza(self, dia, disciplina, horario):
-        sql = "UPDATE from "+dia+" set disciplina='"+disciplina+"', horario='"+horario+"'"
+        sql = "UPDATE FROM "+dia+" set disciplina='"+disciplina+"', horario='"+horario+"'"
         self.executa(sql)
 
     def executa(self, sql):
