@@ -4,10 +4,36 @@ import banco
 class interface():
 
     def __init__(self):
+        self.bd = banco.Banco()
         self.main()
 
+    def cadastarAgenda(self, horario, segunda, terca, quarta, quinta, sexta):
+
+        dias=[]
+        dias.insert(0, "segunda")
+        dias.insert(1, "terca")
+        dias.insert(2, "quarta")
+        dias.insert(3, "quinta")
+        dias.insert(4, "sexta")
+
+        materias = []
+        materias.insert(0, segunda)
+        materias.insert(1, terca)
+        materias.insert(2, quarta)
+        materias.insert(3, quinta)
+        materias.insert(4, sexta)
+
+        for i in range(0,5):
+            for x in range(0,6):
+                if (materias[i][x].get() != "" and horario[x].get() != ""):
+                    self.bd.insere(dias[i], materias[i][x].get(), horario[x].get())
+
+
+
+
+
     def main(self):
-        bd = banco.Banco()
+
         janela = Tk()
         janela.geometry("1024x500")
         janela.title("Agenda")
@@ -67,11 +93,8 @@ class interface():
             sex.insert(x, Entry(janela, fg="black", font=("Verdana", 12), bg="white", width=12))
             sex[x].place(x = 800, y = 100+(40*x))
 
-
-
-
-        print()
         # SEGUNDA
+
         lb = Label(janela, text="Segunda", fg="black", font=("Verdana", 12, "bold"), bg="white").place(x=220, y=70)
         # disciplina = Entry(janela, fg="black", font=("Verdana", 12), bg="white", width=12)
         # disciplina.place(x=200, y=100)
@@ -171,11 +194,16 @@ class interface():
         # disciplina = Entry(janela, fg="black", font=("Verdana", 12), bg="white", width=12)
         # disciplina.place(x=800, y=300)
 
-        btn = Button(janela, text="SALVAR", fg="white", font=("Verdana", 12, "bold"), bg="magenta").place(x=835, y=350)
+
+        bt=Button(janela, text="SALVAR", fg="white", font=("Verdana", 12, "bold"), bg="magenta", command = lambda: self.cadastarAgenda(h, seg,ter,qua, qui, sex))
+        bt.place(x=835, y=350)
+
+        # self.cadastrarAgenda(h, seg, ter, qua, qui, sex)
+
         # bd = Banco()
         # bd.insere("segunda","Matemática","9:30")
 
-        
+
         janela.mainloop()
 
 
