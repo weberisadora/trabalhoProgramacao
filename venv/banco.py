@@ -7,7 +7,7 @@ class Banco():
         self.cursor = self.con.cursor()
 
     def insere(self, dia, disciplina, horario):
-        sql = "INSERT INTO "+dia+" (disciplina, horario) VALUES ('"+disciplina+"', '"+horario+"')"
+        sql = "INSERT INTO horarios (horario, "+dia+") VALUES ('"+horario+"', '"+disciplina+"')"
         self.executa(sql)
 
     def exclui(self, dia, disciplina):
@@ -19,13 +19,12 @@ class Banco():
         self.executa(sql)
 
     def executa(self, sql):
+        print()
         try:
             self.cursor.execute(sql)
-            print("Deu")
             self.con.commit()
-
+            print("Deu")
         except:
             print("Não deu")
             self.con.rollback()
 
-        self.con.close()
