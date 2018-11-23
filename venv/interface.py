@@ -2,19 +2,31 @@ from tkinter import *
 import tkinter as tk
 import banco
 import datetime
+import pyttsx3
 class interface():
 
+    
+
+    
     def __init__(self):
         self.bd = banco.Banco()
         self.main()
 
+
+    
+    def mmm(self, s):
+        print (s)
+    
+    
     def cadastarHorario(self, horario, disciplina, diaSemana):
        self.bd.insere(horario, disciplina, diaSemana)
 
 
+        
+
+
 
     def main(self):
-
         janela = tk.Tk()
         janela.geometry("900x700")
         janela.title("Agenda escolar")
@@ -69,6 +81,36 @@ class interface():
 
 
     def verAgenda(self):
+
+        def ouvir(radio):
+
+            sql = "SELECT * FROM horarios WHERE idHorario = {}".format(radio)
+            self.bd.executa(sql)
+            resultado = self.bd.cursor.fetchall()
+            result = None
+            for registro in resultado:
+                result = registro
+            en = pyttsx3.init()
+            en.setProperty('voice', b'brazil')
+            DiasSemana = [
+                "Segunda-feira",
+                "Terca-feira",
+                "Quarta-feira",
+                "Quinta-feira",
+                "Sexta-feira"
+            ]
+            # en.say("Horário: {}".format(result[1]))
+
+            # q = 2
+            # for x in range(0,5):
+            #   if result[q] != None:
+            #      en.say("Disciplina na {}: {}".format(DiasSemana[x], result[q]))
+            #
+            # else:
+            #   en.say("Sem disciplinas na {}".format(DiasSemana[x]))
+            # q=q+1
+
+            # en.runAndWait()
         janela1 = tk.Tk()
         janela1.geometry("1024x500")
         janela1.title("Agenda escolar")
@@ -104,41 +146,35 @@ class interface():
 
 
 
-        arr = [
-        ]
+        arr = []
 
 
 
-        v = IntVar()
+        
+        
         self.bd.cursor.execute("select * from horarios order by horario asc")
         resultado = self.bd.cursor.fetchall()
         i=0
-        
+        variavel = IntVar()
         for registro in resultado:
 
-
-            arr.insert(i, registro[0])
             Label(janela1, fg="black", font=("Verdana", 12), bg=janela1["bg"], text=""+registro[1]).place(x = 100, y = 100+(40*i))
             h = 2
-            for a in range(0, 5):
+            Radiobutton(janela1,  bg="white", text = registro[0],variable=variavel, value=registro[0]).place(x=50, y=100 + (40 * i))
 
+            for a in range(0, 5):
                 if registro[h] == None:
                     Label(janela1, fg="black", font=("Verdana", 12), bg=janela1["bg"], text = " ").place(x= 200+(150*a), y=100 + (40 * i))
                 else:
                     Label(janela1, fg="black", font=("Verdana", 12), bg=janela1["bg"], text=""+registro[h]).place(x= 200+(150*a), y=100 + (40 * i))
-
                 h = h + 1
-
             i=i+1
+              
         
-
-        q = 0
-        for text in arr:
-
-            b = Radiobutton(janela1,  bg="white",
-                            variable=v, value=text)
-            b.place(x=50, y=100 + (40 * q))
-            q = q + 1
+        
+       
+        
+        Button(janela1, text="Falar horário", fg="white", font=("Verdana", 12, "bold"), bg="magenta", command = lambda: ouvir(variavel.get())).place(x=100, y=10)
 
 
 
