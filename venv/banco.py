@@ -7,27 +7,32 @@ class Banco():
         self.cursor = self.con.cursor()
         
 
-    def insere(self, horario, disciplina, dia):
-        igual = False
+    def insere(self, horario, disciplina, dia, seconds):
+        igual = None
         self.cursor.execute("select horario from horarios")
         resultado = self.cursor.fetchall()
         for registro in resultado:
-            if registro == horario:
+
+            if registro[0] == horario:
                 igual = True
                 break
 
-        if igual == True:
+        if igual:
             print("É igual")
             sql = "UPDATE horarios set " + dia + " = '" + disciplina + "' WHERE horario = '" + horario + "'"
+            self.executa(sql)
+            return "Horário atualizado com sucesso!"
 
         else:
-            sql = "INSERT INTO horarios (horario, " + dia + ") VALUES ('" + horario + "', '" + disciplina + "')"
+            sql = "INSERT INTO horarios (horario, " + dia + ", seconds) VALUES ('" + horario + "', '" + disciplina + "', {})".format(seconds)
             print("Não é igual")
+            self.executa(sql)
+            return "Horário cadastrado com sucesso!"
 
-        self.executa(sql)
 
-    def exclui(self, dia, disciplina):
-        sql = "DELETE FROM "+dia+" WHERE disciplina = '"+disciplina+"'"
+
+    def exclui(self, id):
+        sql = "DELETE FROM horarios WHERE idHorario = {}".format(id)
         self.executa(sql)
 
     def atualiza(self, dia, disciplina, horario):
@@ -35,12 +40,11 @@ class Banco():
         self.executa(sql)
 
     def executa(self, sql):
-        print()
         try:
             self.cursor.execute(sql)
             self.con.commit()
-            print("Deu")
+            print("Cadastrado com sucesso!")
         except:
-            print("Não deu")
+            print("Erro ao cadastrar")
             self.con.rollback()
 
